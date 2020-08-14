@@ -22,6 +22,9 @@ int main() {
     if (pid != 0) {
         printf("[INFO]: Process ID found: %d\n", pid);
     }
+    else {
+        abort();
+    }
 
     /* Get handle to Fall Guys process */
     HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
