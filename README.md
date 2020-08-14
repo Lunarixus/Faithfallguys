@@ -5,9 +5,6 @@ Faithfallguys is an external hack for the Fall Guys game made by Mediatonic.
 I wrote this as a proof of concept for people to learn about how the Fall Guys game works  
 and/or learn how to write hacks for other similar Unity games.
 
-# How to use
-There are precompiled binaries inside of the "Debug" folder, open the game and run the hack to use it.  
-
 # How to compile
 Use Visual Studio 2019 or higher and build for x64 (building for x86 breaks offset calculation).
 
