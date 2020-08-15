@@ -37,7 +37,7 @@ int main() {
     }
 
     /* To test everything is fine, get normalMaxSpeed */
-    uintptr_t maxspeedaddr = AddPointers(hProcess, GameAssemblyBaseAddr + 0x02BC24C8, normalMaxSpeed_offsets);
+    uintptr_t maxspeedaddr = AddPointers(hProcess, GameAssemblyBaseAddr + 0x02886C10, normalMaxSpeed_offsets);
     float normalMaxSpeed_value;
     printf("[INFO]: normalMaxSpeed address is: 0x%p\n", maxspeedaddr);
     ReadProcessMemory(hProcess, (LPCVOID)(maxspeedaddr), &normalMaxSpeed_value, sizeof(float), NULL);
@@ -69,7 +69,14 @@ int main() {
     int jumpforce_value[4];
     printf("[INFO]: jumpforce address is: 0x%p\n", jumpforceaddr);
     ReadProcessMemory(hProcess, (LPCVOID)(jumpforceaddr), &jumpforce_value, sizeof(jumpforce_value), NULL);
-    printf("[INFO]: Got jumpforce value! %f\n\n", jumpforce_value);
+    printf("[INFO]: Got jumpforce value! %d\n\n", jumpforce_value);
+
+    /* Disable grab cooldown */
+    uintptr_t grabcooldownaddr = jumpforceaddr + 0x84;
+    float grabcooldown_value;
+    printf("[INFO]: grabCooldown address is: 0x%p\n", grabcooldownaddr);
+    ReadProcessMemory(hProcess, (LPCVOID)(grabcooldownaddr), &grabcooldown_value, sizeof(jumpforce_value), NULL);
+    printf("[INFO]: Got grabCooldown value! %f\n\n", grabcooldown_value);
 
     /* Print which hacks are currently available */
     printf("[NUMPAD0] Speedhack\n");

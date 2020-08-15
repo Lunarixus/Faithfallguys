@@ -4,5 +4,6 @@
 
 #include "imports.h"
 
-std::vector<unsigned int> normalMaxSpeed_offsets = { 0xA0, 0x248,
-                                                     0x30, 0x78, 0x28, 0xED8 };
+std::vector<unsigned int> normalMaxSpeed_offsets = { 0xA58, 0x10,
+                                                     0x28, 0x28, 0x20, 0x448,
+                                                     0x50, 0x50, 0x18, 0x798 };
