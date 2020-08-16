@@ -33,7 +33,7 @@ int main() {
     printf("[INFO]: Getting base address of GameAssembly.dll...\n");
     uintptr_t GameAssemblyBaseAddr = GetModuleBaseAddress(pid, L"GameAssembly.dll");
     if (GameAssemblyBaseAddr != NULL) {
-        printf("[INFO]: Got base address of GameAssembly.dll: 0x%p\n", GameAssemblyBaseAddr);
+        printf("[INFO]: Got base address of GameAssembly.dll: 0x%p\n\n", GameAssemblyBaseAddr);
     }
 
     /* To test everything is fine, get normalMaxSpeed */
@@ -71,6 +71,13 @@ int main() {
     ReadProcessMemory(hProcess, (LPCVOID)(jumpforceaddr), &jumpforce_value, sizeof(jumpforce_value), NULL);
     printf("[INFO]: Got jumpforce value! %d\n\n", jumpforce_value);
 
+    /* Get value for diveForce */
+    uintptr_t diveforceaddr = jumpforceaddr + 0x28;
+    float diveforce_value;
+    printf("[INFO]: diveForce address is 0x%p\n", diveforceaddr);
+    ReadProcessMemory(hProcess, (LPCVOID)(diveforceaddr), &diveforce_value, sizeof(float), NULL);
+    printf("[INFO]: diveForce value is %f\n\n", diveforce_value);
+
     /* Disable grab cooldown */
     uintptr_t grabcooldownaddr = jumpforceaddr + 0x84;
     float grabcooldown_value;
@@ -80,7 +87,9 @@ int main() {
 
     /* Print which hacks are currently available */
     printf("[NUMPAD0] Speedhack\n");
-    printf("[NUMPAD1] GravityHack\n");
+    printf("[NUMPAD1] Gravity Hack\n");
+    printf("[NUMPAD2] Hover Hack\n");
+    printf("[NUMPAD3] Heavy Man Hack\n");
 
     /* Set up variables for the hacks */
     bool speedhack_on = false;
@@ -90,6 +99,13 @@ int main() {
     bool gravityhack_on = false;
     float newGravityScale_value = -0.500000;
     float oldGravityScale_value = 1.500000;
+
+    bool hoverhack_on = false;
+    float newhoverscale_value = 0.000000;
+
+    float heavyman_on = false;
+    float newdiveForce_value = 4.250000;
+    float olddiveForce_value = 0.250000;
 
     /* Start loop to look for keystates */
     while (1) {
@@ -116,6 +132,28 @@ int main() {
             }
         }
 
+        if (GetAsyncKeyState(VK_NUMPAD2) & 1)
+        {
+            hoverhack_on = !hoverhack_on;
+            if (hoverhack_on == true) {
+                printf("[INFO]: Hover hack toggled on\n");
+            }
+            else if (hoverhack_on == false) {
+                printf("[INFO]: Hover hack toggled off\n");
+            }
+        }
+
+        if (GetAsyncKeyState(VK_NUMPAD3) & 1)
+        {
+            heavyman_on = !heavyman_on;
+            if (heavyman_on == true) {
+                printf("[INFO]: Heavy Man hack toggled on\n");
+            }
+            else if (heavyman_on == false) {
+                printf("[INFO]: Heavy Man hack toggled off\n");
+            }
+        }
+
         /* Do Hax */
         if (speedhack_on == true) {
             WriteProcessMemory(hProcess, (LPVOID)maxspeedaddr, &newMaxSpeed_value, sizeof(newMaxSpeed_value), NULL);
@@ -129,6 +167,20 @@ int main() {
         }
         else {
             WriteProcessMemory(hProcess, (LPVOID)gravityscaleaddr, &oldGravityScale_value, sizeof(newGravityScale_value), NULL);
+        }
+
+        if (hoverhack_on == true) {
+            WriteProcessMemory(hProcess, (LPVOID)maxspeedaddr, &newhoverscale_value, sizeof(newhoverscale_value), NULL);
+        }
+        else {
+            WriteProcessMemory(hProcess, (LPVOID)maxspeedaddr, &oldMaxSpeed_value, sizeof(newMaxSpeed_value), NULL);
+        }
+
+        if (heavyman_on == true) {
+            WriteProcessMemory(hProcess, (LPVOID)diveforceaddr, &newdiveForce_value, sizeof(newdiveForce_value), NULL);
+        }
+        else {
+            WriteProcessMemory(hProcess, (LPVOID)diveforceaddr, &olddiveForce_value, sizeof(olddiveForce_value), NULL);
         }
 
         Sleep(1);

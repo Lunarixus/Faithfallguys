@@ -46,3 +46,29 @@ uintptr_t AddPointers(HANDLE hProcess, uintptr_t addr, std::vector<unsigned int>
     }
     return addr;
 }
+
+bool MemoryCompare(const BYTE* bData, const BYTE* bMask, const char* szMask) {
+	for (; *szMask; ++szMask, ++bData, ++bMask) {
+		if (*szMask == 'x' && *bData != *bMask) {
+			return false;
+		}
+	}
+	return (*szMask == NULL);
+}
+
+DWORD FindSignature(HANDLE hProcess, DWORD start, DWORD size, const char* sig, const char* mask)
+{
+	BYTE* data = new BYTE[size];
+	SIZE_T bytesRead;
+
+	ReadProcessMemory(hProcess, (LPVOID)start, data, size, &bytesRead);
+
+	for (DWORD i = 0; i < size; i++)
+	{
+		if (MemoryCompare((const BYTE*)(data + i), (const BYTE*)sig, mask)) {
+			return start + i;
+		}
+	}
+	delete[] data;
+	return NULL;
+}
