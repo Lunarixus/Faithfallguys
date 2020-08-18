@@ -8,9 +8,17 @@ int GetWindowPID(const char *windowname) {
     int pid = 0;
     DWORD pidDw;
     HWND hWnd = FindWindowA(0, windowname);
+	if (hWnd == NULL) {
+		return 0;
+	}
     GetWindowThreadProcessId(hWnd, &pidDw);
     pid = (int)pidDw;
-    return pid;
+	if (pid != 0) {
+		return pid;
+	}
+	else {
+		return 0;
+	}
 }
 
 uintptr_t GetModuleBaseAddress(DWORD pid, const wchar_t* modulename)
