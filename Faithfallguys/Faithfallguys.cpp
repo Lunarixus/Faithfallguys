@@ -101,7 +101,7 @@ int main() {
     float oldGravityScale_value = 1.500000;
 
     bool hoverhack_on = false;
-    float newhoverscale_value = 0.000000;
+    float newhoverscale_value = 0.100000;
 
     float heavyman_on = false;
     float newdiveForce_value = 4.250000;
@@ -182,6 +182,13 @@ int main() {
         else {
             WriteProcessMemory(hProcess, (LPVOID)diveforceaddr, &olddiveForce_value, sizeof(olddiveForce_value), NULL);
         }
+
+#if 0
+        /* TEST: Kudos value hack */
+        int newkudosvalue = 999999999;
+        uintptr_t kudosvalueaddr = AddPointers(hProcess, GameAssemblyBaseAddr + 0x2BCEF20, kudos_offsets);
+        WriteProcessMemory(hProcess, (LPVOID)kudosvalueaddr, &newkudosvalue, sizeof(newkudosvalue), NULL);
+#endif
 
         Sleep(1);
     }
